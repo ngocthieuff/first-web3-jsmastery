@@ -19,3 +19,10 @@ tailwindcss in react:
     Hello world!
     </h1>
 ```
+
+
+```console
+cd smart_contract
+
+npm init -y //initialize an empty package json
+```
