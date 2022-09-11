@@ -3,7 +3,12 @@ import { ethers } from 'ethers';
 
 import { contractABI, contractAddress } from '../utils/constants';
 
-export const TransactionContext = React.createContext<undefined | (() => Promise<void>)>(undefined);
+type ContextType = {
+    connectWallet: (() => Promise<void>);
+    currentAccount: string;
+  };
+
+export const TransactionContext = React.createContext<undefined | ContextType>(undefined);
 
 const { ethereum } = window;
 
@@ -25,28 +30,32 @@ export const TransactionProvider = ({ children } : { children: any }) => {
 
     const checkIfWalletIsConnected = async () => {
 
-        if(!ethereum) return alert("Please install metamask");
-        const accounts = await ethereum.request({ method: 'eth_accounts' });
-
-        if(accounts.length) {
-            setCurrentAccount(accounts[0]);
-
-            // get all transactions
+        try {
+            if(!ethereum) return alert("Please install metamask");
+            const accounts = await ethereum.request({ method: 'eth_accounts' });
+    
+            if(accounts.length) {
+                setCurrentAccount(accounts[0]);
+                console.log('account: ', accounts[0]);
+                // get all transactions
+            } else {
+                console.log('No accounts found');
+            }    
+        } catch (error) {
+            console.log(error);
+            throw new Error("No Ethereum object found.");
         }
-
-        console.log('accounts: ', accounts);
     }
 
     const connectWallet = async () => {
-        console.log(' connectWallet in transaction context');
+        console.log('connectWallet() function in TransactionContext.tsx');
         try {
             if(!ethereum) return alert("Please install metamask");
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             setCurrentAccount(accounts[0]);
         } catch (error) {
             console.log(error);
-
-            throw new Error("No Ethereum object found.")
+            throw new Error("No Ethereum object found.");
         }
     }
 
@@ -54,8 +63,13 @@ export const TransactionProvider = ({ children } : { children: any }) => {
         checkIfWalletIsConnected();
     }, [])
 
+    const conttextType: ContextType = {
+        connectWallet: connectWallet,
+        currentAccount: currentAccount,    
+    }
+
     return (
-        <TransactionContext.Provider value={connectWallet} >
+        <TransactionContext.Provider value={conttextType} >
             {children}
         </TransactionContext.Provider>
     )
