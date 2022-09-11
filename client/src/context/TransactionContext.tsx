@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 
 import { contractABI, contractAddress } from '../utils/constants';
 
-export const TransactionContext = React.createContext({});
+export const TransactionContext = React.createContext<undefined | (() => Promise<void>)>(undefined);
 
 const { ethereum } = window;
 
@@ -28,6 +28,12 @@ export const TransactionProvider = ({ children } : { children: any }) => {
         if(!ethereum) return alert("Please install metamask");
         const accounts = await ethereum.request({ method: 'eth_accounts' });
 
+        if(accounts.length) {
+            setCurrentAccount(accounts[0]);
+
+            // get all transactions
+        }
+
         console.log('accounts: ', accounts);
     }
 
@@ -49,7 +55,7 @@ export const TransactionProvider = ({ children } : { children: any }) => {
     }, [])
 
     return (
-        <TransactionContext.Provider value={{ connectWallet }} >
+        <TransactionContext.Provider value={connectWallet} >
             {children}
         </TransactionContext.Provider>
     )
