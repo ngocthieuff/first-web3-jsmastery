@@ -32,4 +32,10 @@ npx hardhat
 
 npx hardhat test
 
+npm install --save-dev @nomiclabs/hardhat-ethers 'ethers@^5.0.0'
+// usage: deploy.ts
+// import "@nomiclabs/hardhat-ethers";
+// import { ethers } from "hardhat";
+
+
 ```
