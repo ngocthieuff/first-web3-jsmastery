@@ -33,16 +33,9 @@ export const TransactionProvider = ({ children } : { children: any }) => {
     const [currentAccount, setCurrentAccount] = useState("");
     const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('event', e.target.value)
-        //setFormData((prevState) => ({ ...prevState, [name]: e.currentTarget.value }))
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, name: any) => {
+        setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     }
-
-    const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const enteredName = event.target.value;
-        console.log(enteredName);
-      };
-
 
     const checkIfWalletIsConnected = async () => {
 
