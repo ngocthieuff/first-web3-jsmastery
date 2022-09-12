@@ -11,7 +11,7 @@ export default [
   },
   {
     id: 2,
-    url: "https://media4.popsugar-assets.com/files/2013/11/07/832/n/1922398/eb7a69a76543358d_28.gif",
+    url: "https://c.tenor.com/sY_UF36Q6ZoAAAAd/crayon-shin-chan-shin.gif",
     message: "",
     timestamp: "12/21/2021, 4:33:21 PM",
     addressFrom: "0xCF8e569A97C423952DdFf902375C7C76549A6A90",
@@ -38,7 +38,7 @@ export default [
   },
   {
     id: 5,
-    url: "https://i.pinimg.com/originals/73/d3/a1/73d3a14d212314ab1f7268b71d639c15.gif",
+    url: "https://i.pinimg.com/originals/61/ff/72/61ff72833ed9e0553d9dec8285afb238.gif",
     message: "",
     timestamp: "12/21/2021, 4:33:21 PM",
     addressFrom: "0xCF8e569A97C423952DdFf902375C7C76549A6A90",
