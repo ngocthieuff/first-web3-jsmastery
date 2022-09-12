@@ -6,6 +6,10 @@ import { contractABI, contractAddress } from '../utils/constants';
 type ContextType = {
     connectWallet: (() => Promise<void>);
     currentAccount: string;
+    formData: any;
+    setFormData: any;
+    handleChange: any;
+    sendTransaction: (() => Promise<void>);
   };
 
 export const TransactionContext = React.createContext<undefined | ContextType>(undefined);
@@ -27,6 +31,18 @@ const getEthereumContract = () => {
 export const TransactionProvider = ({ children } : { children: any }) => {
 
     const [currentAccount, setCurrentAccount] = useState("");
+    const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('event', e.target.value)
+        //setFormData((prevState) => ({ ...prevState, [name]: e.currentTarget.value }))
+    }
+
+    const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const enteredName = event.target.value;
+        console.log(enteredName);
+      };
+
 
     const checkIfWalletIsConnected = async () => {
 
@@ -59,6 +75,17 @@ export const TransactionProvider = ({ children } : { children: any }) => {
         }
     }
 
+    const sendTransaction =  async () => {
+        try {
+            if(!ethereum) return alert("Please install metamask");
+            console.log('send transactions');
+            // get the data from the form...
+        } catch (error) {
+            console.log(error);
+            throw new Error("No Ethereum object found.");
+        }
+    }
+
     useEffect(() => {
         checkIfWalletIsConnected();
     }, [])
@@ -66,6 +93,10 @@ export const TransactionProvider = ({ children } : { children: any }) => {
     const conttextType: ContextType = {
         connectWallet: connectWallet,
         currentAccount: currentAccount,    
+        formData: formData,
+        setFormData: setFormData,
+        handleChange: handleChange,
+        sendTransaction: sendTransaction,
     }
 
     return (
