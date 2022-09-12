@@ -9,6 +9,7 @@ type ContextType = {
     formData: any;
     setFormData: any;
     handleChange: any;
+    transactions: any;
     sendTransaction: (() => Promise<void>);
   };
 
@@ -16,6 +17,14 @@ export const TransactionContext = React.createContext<undefined | ContextType>(u
 
 const { ethereum } = window;
 
+const createEthereumContract = () => {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+    return transactionsContract;
+  };
+  
 const getEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
@@ -30,11 +39,39 @@ export const TransactionProvider = ({ children } : { children: any }) => {
     const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionsCount'));
+    const [transactions, setTransactions] = useState([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, name: any) => {
         setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     }
 
+    const getAllTransactions = async () => {
+        try {
+          if (ethereum) {
+            const transactionsContract = createEthereumContract();
+    
+            const availableTransactions = await transactionsContract.getAllTransactions();
+    
+            const structuredTransactions = availableTransactions.map((transaction: any) => ({
+              addressTo: transaction.receiver,
+              addressFrom: transaction.sender,
+              timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+              message: transaction.message,
+              keyword: transaction.keyword,
+              amount: parseInt(transaction.amount._hex) / (10 ** 18)
+            }));
+    
+            console.log(structuredTransactions);
+    
+            setTransactions(structuredTransactions);
+          } else {
+            console.log("Ethereum is not present");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
     const checkIfWalletIsConnected = async () => {
 
         try {
@@ -116,6 +153,7 @@ export const TransactionProvider = ({ children } : { children: any }) => {
         setFormData: setFormData,
         handleChange: handleChange,
         sendTransaction: sendTransaction,
+        transactions: transactions,
     }
 
     return (
