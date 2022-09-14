@@ -24,8 +24,6 @@ const Welcome = () => {
 
     const context = useContext(TransactionContext);
 
-    console.log(context);
-
     const handleSubmit = () => {
         const { addressTo, amount, keyword, message } = context?.formData;
 
@@ -61,6 +59,14 @@ const Welcome = () => {
                         </p>
                     </button>
                     }
+                                
+                    <button
+                        type="button"
+                        onClick={context?.getAllTransactions}
+                        className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                    >
+                        Get all transactions
+                    </button>
 
                     <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                         <div className={`rounded-tl-2xl ${companyCommonStyles}`}>

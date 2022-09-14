@@ -11,6 +11,7 @@ type ContextType = {
     handleChange: any;
     transactions: any;
     sendTransaction: (() => Promise<void>);
+    getAllTransactions: (() => Promise<void>);
   };
 
 export const TransactionContext = React.createContext<undefined | ContextType>(undefined);
@@ -108,7 +109,8 @@ export const TransactionProvider = ({ children } : { children: any }) => {
             if(!ethereum) return alert("Please install metamask");
             
             const { addressTo, amount, keyword, message } = formData;
-            const transactionContract = getEthereumContract();
+            const transactionContract = 
+            getEthereumContract();
             const parsedAmount = ethers.utils.parseEther(amount);
 
             await ethereum.request({
@@ -135,7 +137,7 @@ export const TransactionProvider = ({ children } : { children: any }) => {
             
             setTransactionCount(transactionCount.toNumber());
 
-            console.log(transactionCount);
+            console.log('transactionCount', transactionCount);
         } catch (error) {
             console.log(error);
             throw new Error("No Ethereum object found.");
@@ -154,6 +156,7 @@ export const TransactionProvider = ({ children } : { children: any }) => {
         handleChange: handleChange,
         sendTransaction: sendTransaction,
         transactions: transactions,
+        getAllTransactions: getAllTransactions,
     }
 
     return (
